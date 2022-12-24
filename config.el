@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "emPeeGee"
+      user-mail-address "")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -32,7 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-solarized-dark-high-contrast)
 ;; (setq doom-theme 'doom-solarized-light)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -77,20 +78,27 @@
 ;; they are implemented.
 
 ;; (set-face-attribute 'default nil :height 145)
-(set-face-attribute 'default nil :font "JetBrains Mono-11")
-(set-face-attribute 'mode-line nil :font "JetBrains Mono-6")
 
-(setq doom-modeline-height 1) ; optional
-(custom-set-faces
-  '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
-  '(mode-line-active ((t (:family  "JetBrains Mono" :height 0.9)))) ; For 29+
-  '(mode-line-inactive ((t (:family "JetBrains Mono" :height 0.9)))))
+(setq doom-themes-treemacs-theme "doom-colors")
 
-;; (set-face-attribute 'mode-line nil :height 80)
+(defmacro with-system (type &rest body)
+  "Evaluate BODY if `system-type' equals TYPE."
+  (declare (indent defun))
+  `(when (eq system-type ',type)
+     ,@body))
 
-;; (setq doom-modeline-height 0.2)
-;; (set-face-attribute 'mode-line nil :height 10)
-;; (set-face-attribute 'mode-line-inactive nil :height 10)
+(with-system darwin
+  (set-face-attribute 'default nil :font "JetBrains Mono-16"))
+
+
+(with-system windows-nt
+  (set-face-attribute 'default nil :font "JetBrains Mono-11")
+  (custom-set-faces
+    '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
+    '(mode-line-active ((t (:family  "JetBrains Mono" :height 0.9)))) ; For 29+
+    '(mode-line-inactive ((t (:family "JetBrains Mono" :height 0.9))))))
+
+
 
 (add-hook 'after-init-hook #'global-prettier-mode)
 
@@ -103,21 +111,123 @@
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(setq treemacs-follow-mode t)
-(setq treemacs-filewatch-mode t)
+(after! treemacs
+  ;; (treemacs-follow-mode 1)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-git-mode 'deferred))
+
+
+;; TODO: colors for now
+(defface custom-line-highlight '((t (:background "#616161" :foreground "#9CCC65" :extend t))) "")
+
+(add-hook
+ 'treemacs-mode-hook
+ (defun channge-hl-line-mode ()
+   (setq-local hl-line-face 'custom-line-highlight)
+   (overlay-put hl-line-overlay 'face hl-line-face)
+   (treemacs--setup-icon-background-colors)))
+
+
 
 (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-
-;; Doesn't work
-(set-face-background show-paren-match-expression "#FF00FF")
-(set-face-background show-paren-match "#FF00FF")
-(set-face-background sp-show-pair-match-face "#FF00FF")
-(set-face-background rainbow-delimiters-base-error-face "yellow")
-(set-face-background hl-line "yellow")
-
-;; (set-face-attribute 'show-paren-match nil :background "yellow")
-;; (set-face-attribute 'show-paren-match-expression nil :background "yellow")
+(setq doom-modeline-buffer-encoding nil)
 
 
-;; (add-to-list 'default-frame-alist '(foreground-color . "#E0DFDB"))
-;; (add-to-list 'default-frame-alist '(background-color . "#102372"))
+;; (set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-19")
+
+(custom-set-faces!
+  ;; press SPC u g a to know the current face under cursor
+  ;; '(hl-line :background "#96B6B4")
+  '(font-lock-comment-face :slant normal)
+  '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
+  '(treemacs-git-modified-face :foreground "#9d47ff")
+  '(show-paren-match :foreground "#FFFFFF" :background "#FF00FF")
+  '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF"))
+  ;; '(org-ellipsis :foreground "#FFFFFF"))
+
+
+(setq centaur-tabs-set-bar 'under)
+(setq x-underline-at-descent-line t)
+(setq centaur-tabs-set-close-button nil)
+
+(use-package centaur-tabs
+  :hook
+  (dired-mode . centaur-tabs-local-mode)
+  (dashboard-mode . centaur-tabs-local-mode)
+  )
+
+(map! :leader
+  (:prefix ("e". "evaluate/ERC/EWW")
+   :desc "Evaluate elisp in buffer" "b" #'eval-buffer
+   :desc "Evaluate defun" "d" #'eval-defun
+   :desc "Evaluate elisp expression" "e" #'eval-expression
+   :desc "Evaluate last sexpression" "l" #'eval-last-sexp
+   :desc "Evaluate elisp in region" "r" #'eval-region))
+
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-banner-logo-title nil)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-center-content t)
+  (setq dashboard-set-navigator t)
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (registers . 5)))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
+
+(setq doom-fallback-buffer-name "*dashboard*")
+
+;; Hey buddy
+
+;; Config spell
+(after! spell-fu
+  (setq spell-fu-idle-delay 1)  ; default is 0.25
+
+(add-hook 'spell-fu-mode-hook
+  (lambda ()
+    (spell-fu-dictionary-add
+      (spell-fu-get-personal-dictionary "en-personal" "./spell/en.utf-8.add"))))
+
+  (setq-default spell-fu-word-regexp
+    (rx
+     (or
+
+      ;; lowercase
+      (seq
+       (one-or-more lower)
+       (opt
+	(any "'’")
+	(one-or-more lower)
+	word-end))
+
+      ;; capitalized
+      (seq
+       upper
+       (zero-or-more lower)
+       (opt
+	(any "'’")
+	(one-or-more lower)
+	word-end))
+
+      ;; uppercase
+      (seq
+       (one-or-more upper)
+       (opt
+	(any "'’")
+	(one-or-more upper)
+	word-end)))))
+
+(defun cs/spell-fu-check-range (pos-beg pos-end)
+  (let (case-fold-search)
+  (spell-fu-check-range-default pos-beg pos-end)))
+
+(setq-default spell-fu-check-range #'cs/spell-fu-check-range))
+
+(global-spell-fu-mode)

@@ -51,3 +51,5 @@
 
 (package! prettier)
 (package! key-chord)
+(package! treemacs-all-the-icons)
+(package! dashboard)
