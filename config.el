@@ -92,6 +92,8 @@
 
 
 (with-system windows-nt
+  (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
+  (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
   (set-face-attribute 'default nil :font "JetBrains Mono-11")
   (custom-set-faces
     '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
@@ -157,32 +159,32 @@
   (dashboard-mode . centaur-tabs-local-mode)
   )
 
-(map! :leader
-  (:prefix ("e". "evaluate/ERC/EWW")
-   :desc "Evaluate elisp in buffer" "b" #'eval-buffer
-   :desc "Evaluate defun" "d" #'eval-defun
-   :desc "Evaluate elisp expression" "e" #'eval-expression
-   :desc "Evaluate last sexpression" "l" #'eval-last-sexp
-   :desc "Evaluate elisp in region" "r" #'eval-region))
+; (map! :leader
+;   (:prefix ("e". "evaluate/ERC/EWW")
+;    :desc "Evaluate elisp in buffer" "b" #'eval-buffer
+;    :desc "Evaluate defun" "d" #'eval-defun
+;    :desc "Evaluate elisp expression" "e" #'eval-expression
+;    :desc "Evaluate last sexpression" "l" #'eval-last-sexp
+;    :desc "Evaluate elisp in region" "r" #'eval-region))
 
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-banner-logo-title nil)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-center-content t)
-  (setq dashboard-set-navigator t)
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (registers . 5)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
+; (use-package dashboard
+;   :init      ;; tweak dashboard config before loading it
+;   (setq dashboard-banner-logo-title nil)
+;   (setq dashboard-set-file-icons t)
+;   (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+;   (setq dashboard-center-content t)
+;   (setq dashboard-set-navigator t)
+;   (setq dashboard-items '((recents . 5)
+;                           (agenda . 5 )
+;                           (bookmarks . 5)
+;                           (projects . 5)
+;                           (registers . 5)))
+;   :config
+;   (dashboard-setup-startup-hook)
+;   (dashboard-modify-heading-icons '((recents . "file-text")
+;                                     (bookmarks . "book"))))
 
-(setq doom-fallback-buffer-name "*dashboard*")
+; (setq doom-fallback-buffer-name "*dashboard*")
 
 
 ;; for tsx doesn't work at all
