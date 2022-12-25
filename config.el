@@ -32,8 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
-;; (setq doom-theme 'doom-solarized-dark-high-contrast)
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-solarized-dark-high-contrast)
 ;; (setq doom-theme 'doom-solarized-light)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -140,7 +140,7 @@
 
 (custom-set-faces!
   ;; press SPC u g a to know the current face under cursor
-  ;; '(hl-line :background "#96B6B4")
+  '(hl-line :background "#293b52" :extend t)
   '(font-lock-comment-face :slant normal)
   '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
   '(treemacs-git-modified-face :foreground "#9d47ff")
@@ -149,9 +149,9 @@
   ;; '(org-ellipsis :foreground "#FFFFFF"))
 
 
-(setq centaur-tabs-set-bar 'under)
-(setq x-underline-at-descent-line t)
-(setq centaur-tabs-set-close-button nil)
+;; (setq centaur-tabs-set-bar 'under)
+;; (setq x-underline-at-descent-line t)
+;; (setq centaur-tabs-set-close-button nil)
 
 (use-package centaur-tabs
   :hook
@@ -233,7 +233,6 @@
 ;; (setq-default spell-fu-check-range #'cs/spell-fu-check-range))
 
 ;; (global-spell-fu-mode)
-;; baaaad
 
 (after! flyspell
   (setq ispell-dictionary "en")
@@ -246,12 +245,13 @@
   (overlay-put overlay 'keymap nil)
   (overlay-put overlay 'mouse-face nil))
 (advice-add 'make-flyspell-overlay :filter-return #'make-flyspell-overlay-return-mouse-stuff)
-;; new rodr here
 
 ;; (add-hook 'text-mode-hook 'flyspell-mode)
 ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 (add-hook 'find-file-hook 'flyspell-on-for-buffer-type)
+
+;; TODO: personal dictionary on ~/.emacs.d/.local/etc/ispell/
 
 (defun flyspell-on-for-buffer-type ()
   (interactive)
@@ -265,6 +265,22 @@
       (message "Flyspell on (text)")
       (flyspell-mode 1)))))
 
-;; (setq flyspell-mouse-map nil)
-;; (setq flyspell-mouse-map (make-sparse-keymap))
-;; CamelCase camelCase baaad quickTast quickTest
+
+;; TODO: flyspell warning duplicated
+
+;; (setq magit-diff-refine-hunk 'all)
+(use-package! magit-delta
+  :after magit
+  :config
+  (setq
+    magit-delta-default-dark-theme "OneHalfDark"
+    magit-delta-default-light-theme "Github"
+    magit-delta-hide-plus-minus-markers nil)
+  (magit-delta-mode))
+
+
+
+
+;; TODO: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
+(global-set-key (kbd "M-j") #'drag-stuff-down)
+(global-set-key (kbd "M-k") #'drag-stuff-up)
