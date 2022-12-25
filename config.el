@@ -32,8 +32,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-one)
-(setq doom-theme 'doom-solarized-dark-high-contrast)
+(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-solarized-dark-high-contrast)
 ;; (setq doom-theme 'doom-solarized-light)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -184,50 +184,85 @@
 
 (setq doom-fallback-buffer-name "*dashboard*")
 
-;; Hey buddy
 
-;; Config spell
-(after! spell-fu
-  (setq spell-fu-idle-delay 1)  ; default is 0.25
+;; for tsx doesn't work at all
+;; ;; Config spell
+;; (after! spell-fu
+;;   (setq spell-fu-idle-delay 1)  ; default is 0.25
 
-(add-hook 'spell-fu-mode-hook
-  (lambda ()
-    (spell-fu-dictionary-add
-      (spell-fu-get-personal-dictionary "en-personal" "./spell/en.utf-8.add"))))
+;; (add-hook 'spell-fu-mode-hook
+;;   (lambda ()
+;;     (spell-fu-dictionary-add
+;;       (spell-fu-get-personal-dictionary "en-personal" "./spell/en.utf-8.add"))))
 
-  (setq-default spell-fu-word-regexp
-    (rx
-     (or
+;;   (setq-default spell-fu-word-regexp
+;;     (rx
+;;      (or
 
-      ;; lowercase
-      (seq
-       (one-or-more lower)
-       (opt
-	(any "'’")
-	(one-or-more lower)
-	word-end))
+;;       ;; lowercase
+;;       (seq
+;;        (one-or-more lower)
+;;        (opt
+;; 	(any "'’")
+;; 	(one-or-more lower)
+;; 	word-end))
 
-      ;; capitalized
-      (seq
-       upper
-       (zero-or-more lower)
-       (opt
-	(any "'’")
-	(one-or-more lower)
-	word-end))
+;;       ;; capitalized
+;;       (seq
+;;        upper
+;;        (zero-or-more lower)
+;;        (opt
+;; 	(any "'’")
+;; 	(one-or-more lower)
+;; 	word-end))
 
-      ;; uppercase
-      (seq
-       (one-or-more upper)
-       (opt
-	(any "'’")
-	(one-or-more upper)
-	word-end)))))
+;;       ;; uppercase
+;;       (seq
+;;        (one-or-more upper)
+;;        (opt
+;; 	(any "'’")
+;; 	(one-or-more upper)
+;; 	word-end)))))
 
-(defun cs/spell-fu-check-range (pos-beg pos-end)
-  (let (case-fold-search)
-  (spell-fu-check-range-default pos-beg pos-end)))
+;; (defun cs/spell-fu-check-range (pos-beg pos-end)
+;;   (let (case-fold-search)
+;;   (spell-fu-check-range-default pos-beg pos-end)))
 
-(setq-default spell-fu-check-range #'cs/spell-fu-check-range))
+;; (setq-default spell-fu-check-range #'cs/spell-fu-check-range))
 
-(global-spell-fu-mode)
+;; (global-spell-fu-mode)
+;; baaaad
+
+(after! flyspell
+  (setq ispell-dictionary "en")
+  (setq flyspell-lazy-idle-seconds 1))
+  (setq flyspell-lazy-window-idle-seconds 1)
+
+;; Remove mouse action on misspelled words
+(defun make-flyspell-overlay-return-mouse-stuff (overlay)
+  (overlay-put overlay 'help-echo nil)
+  (overlay-put overlay 'keymap nil)
+  (overlay-put overlay 'mouse-face nil))
+(advice-add 'make-flyspell-overlay :filter-return #'make-flyspell-overlay-return-mouse-stuff)
+;; new rodr here
+
+;; (add-hook 'text-mode-hook 'flyspell-mode)
+;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+(add-hook 'find-file-hook 'flyspell-on-for-buffer-type)
+
+(defun flyspell-on-for-buffer-type ()
+  (interactive)
+  ;; if flyspell mode is not already on, turn it on
+  (if (not (symbol-value flyspell-mode))
+      (if (derived-mode-p 'prog-mode)
+      ;; (progn
+      ;;   (message "Flyspell on (code)")
+      ;;   (flyspell-prog-mode))
+    (progn
+      (message "Flyspell on (text)")
+      (flyspell-mode 1)))))
+
+;; (setq flyspell-mouse-map nil)
+;; (setq flyspell-mouse-map (make-sparse-keymap))
+;; CamelCase camelCase baaad
