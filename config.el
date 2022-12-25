@@ -265,4 +265,4 @@
 
 ;; (setq flyspell-mouse-map nil)
 ;; (setq flyspell-mouse-map (make-sparse-keymap))
-;; CamelCase camelCase baaad
+;; CamelCase camelCase baaad quickTast quickTest
