@@ -159,13 +159,13 @@
   (dashboard-mode . centaur-tabs-local-mode)
   )
 
-; (map! :leader
-;   (:prefix ("e". "evaluate/ERC/EWW")
-;    :desc "Evaluate elisp in buffer" "b" #'eval-buffer
-;    :desc "Evaluate defun" "d" #'eval-defun
-;    :desc "Evaluate elisp expression" "e" #'eval-expression
-;    :desc "Evaluate last sexpression" "l" #'eval-last-sexp
-;    :desc "Evaluate elisp in region" "r" #'eval-region))
+(map! :leader
+  (:prefix ("e". "evaluate/ERC/EWW")
+   :desc "Evaluate elisp in buffer" "b" #'eval-buffer
+   :desc "Evaluate defun" "d" #'eval-defun
+   :desc "Evaluate elisp expression" "e" #'eval-expression
+   :desc "Evaluate last sexpression" "l" #'eval-last-sexp
+   :desc "Evaluate elisp in region" "r" #'eval-region))
 
 ; (use-package dashboard
 ;   :init      ;; tweak dashboard config before loading it
@@ -268,7 +268,8 @@
 
 ;; TODO: flyspell warning duplicated
 
-;; (setq magit-diff-refine-hunk 'all)
+;; NOTE: discarding code from magit doesn't work
+(setq magit-diff-refine-hunk 'all)
 (use-package! magit-delta
   :after magit
   :config
@@ -281,6 +282,11 @@
 
 
 
-;; TODO: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
+;; NOTE: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
 (global-set-key (kbd "M-j") #'drag-stuff-down)
 (global-set-key (kbd "M-k") #'drag-stuff-up)
+
+
+(setq evil-goggles-duration 0.750) ;; default is 0.200
+(custom-set-faces
+ '(evil-goggles-default-face ((t (:inherit 'highlight :background "orange" :foreground "white"))))) ;; default is to inherit 'region
