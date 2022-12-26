@@ -246,12 +246,8 @@
   (overlay-put overlay 'mouse-face nil))
 (advice-add 'make-flyspell-overlay :filter-return #'make-flyspell-overlay-return-mouse-stuff)
 
-;; (add-hook 'text-mode-hook 'flyspell-mode)
-;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 (add-hook 'find-file-hook 'flyspell-on-for-buffer-type)
-
-;; TODO: personal dictionary on ~/.emacs.d/.local/etc/ispell/
 
 (defun flyspell-on-for-buffer-type ()
   (interactive)
@@ -266,27 +262,58 @@
       (flyspell-mode 1)))))
 
 
-;; TODO: flyspell warning duplicated
 
-;; NOTE: discarding code from magit doesn't work
-(setq magit-diff-refine-hunk 'all)
-(use-package! magit-delta
-  :after magit
-  :config
-  (setq
-    magit-delta-default-dark-theme "OneHalfDark"
-    magit-delta-default-light-theme "Github"
-    magit-delta-hide-plus-minus-markers nil)
-  (magit-delta-mode))
+;; ;; NOTE: discarding code from magit doesn't work
+;; (setq magit-diff-refine-hunk 'all)
+;; (use-package! magit-delta
+;;   :after magit
+;;   :config
+;;   (setq
+;;     magit-delta-default-dark-theme "OneHalfDark"
+;;     magit-delta-default-light-theme "Github"
+;;     magit-delta-hide-plus-minus-markers nil)
+;;   (magit-delta-mode))
 
+(use-package blamer
+  :defer 20
+  :custom
+  (blamer-idle-time 0.5)
+  (blamer-min-offset 10)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    :height 100
+                    :italic t))))
+(setq blamer-max-commit-message-length 60)
 
+(map! :leader
+  "t B" #'blamer-mode)
 
-
-;; NOTE: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
 (global-set-key (kbd "M-j") #'drag-stuff-down)
 (global-set-key (kbd "M-k") #'drag-stuff-up)
 
 
-(setq evil-goggles-duration 0.750) ;; default is 0.200
+(map! :leader
+      "g p" #'git-gutter:popup-hunk
+      "y" (cmd! (message "Hello world")))
+
+(setq evil-goggles-duration 0.500) ;; default is 0.200
 (custom-set-faces
- '(evil-goggles-default-face ((t (:inherit 'highlight :background "orange" :foreground "white"))))) ;; default is to inherit 'region
+  '(evil-goggles-default-face ((t (:inherit 'highlight :background "orange" :foreground "white"))))) ;; default is to inherit 'region
+
+;; enable word-wrap (almost) everywhere
+(+global-word-wrap-mode +1)
+
+;; NOTE: Windows installation:
+;; ONLY using pacman, first install mingw and all related stuff.
+;; Be sure that you delete all the mingw from PC so the only left is pacman. Like choco or scoop
+;; Install emacs itself using pacman.
+
+
+;; NOTE: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
+;; NOTE: personal dictionary on ~/.emacs.d/.local/etc/ispell/
+
+;; TODO: modeline is going from screen in right part
+;; TODO: flyspell warning duplicated
+
+
