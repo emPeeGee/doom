@@ -81,26 +81,47 @@
 
 (setq doom-themes-treemacs-theme "doom-colors")
 
-(defmacro with-system (type &rest body)
-  "Evaluate BODY if `system-type' equals TYPE."
-  (declare (indent defun))
-  `(when (eq system-type ',type)
-     ,@body))
 
-(with-system darwin
+(when (eq system-type 'darwin)
   (set-face-attribute 'default nil :font "JetBrains Mono-16"))
 
 
-(with-system windows-nt
-  (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
-  (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
-  (set-face-attribute 'default nil :font "JetBrains Mono-11")
-  (custom-set-faces
-    '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
-    '(mode-line-active ((t (:family  "JetBrains Mono" :height 0.9)))) ; For 29+
-    '(mode-line-inactive ((t (:family "JetBrains Mono" :height 0.9))))))
+
+;; https://github.com/termitereform/JunkPile/blob/master/emacs-on-windows.md#creating-a-safe-start-shortcut
+;; https://emacs.stackexchange.com/questions/46541/running-emacs-as-a-daemon-does-not-load-custom-set-faces
+(defun windows-face()
+  "Setup specific windows settings"
+  (when (eq system-type 'windows-nt)
+    (message "Setting windows")
+    (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
+    (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
+    (set-face-attribute 'default nil :font "JetBrains Mono-12")
+    (custom-set-faces
+      '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
+      '(mode-line-active ((t (:family  "JetBrains Mono" :height 0.9)))) ; For 29+
+      '(mode-line-inactive ((t (:family "JetBrains Mono" :height 0.9))))))
+)
+
+(defun my-frame-tweaks (&optional frame)
+  "My personal frame tweaks."
+  (unless frame
+    (setq frame (selected-frame)))
+  (when frame
+    (with-selected-frame frame
+      (when (display-graphic-p)
+        (tool-bar-mode -1))))
+    (windows-face)
+)
 
 
+;; For the case that the init file runs after the frame has been created. Call of emacs without --daemon option.
+(my-frame-tweaks)
+;; For the case that the init file runs before the frame is created. Call of emacs with --daemon option.
+(add-hook 'after-make-frame-functions #'my-frame-tweaks t)
+
+;; Don't create new workspace on new frame
+(after! persp-mode
+  (setq persp-emacsclient-init-frame-behaviour-override "main"))
 
 (add-hook 'after-init-hook #'global-prettier-mode)
 
@@ -138,9 +159,18 @@
 
 ;; (set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-19")
 
+;; TODO: spelling history word
+;; (custom-theme-set-faces
+;;  'doom-solarized-dark-high-contrast
+;;  '(flyspell-duplicate ((t (:weight bold :underline (:color "green" :style wave)))))
+;;  '(flyspell-incorrect ((t (:weight bold :underline (:color "#8F00FF" :style wave))))))
+
 (custom-set-faces!
   ;; press SPC u g a to know the current face under cursor
   '(hl-line :background "#293b52" :extend t)
+  '(region :background "#3e4e63") ;; selected
+  '(flyspell-incorrect :underline (:color "#FF00FF" :style wave))
+  '(flyspell-duplicate :underline (:color "#9400D3" :style wave))
   '(font-lock-comment-face :slant normal)
   '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
   '(treemacs-git-modified-face :foreground "#9d47ff")
@@ -312,8 +342,9 @@
 
 ;; NOTE: C-h k, 'SPC h k'  method of describing key-binds will also tell you which keymap the key was found in.
 ;; NOTE: personal dictionary on ~/.emacs.d/.local/etc/ispell/
+;; (setq ispell-personal-dictionary "C:/path/to/your/.ispell")
+;; C:\Users\mipopovici and on in roaming personal dir location
+
 
 ;; TODO: modeline is going from screen in right part
 ;; TODO: flyspell warning duplicated
-
-
