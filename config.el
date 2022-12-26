@@ -179,24 +179,6 @@
   ;; '(org-ellipsis :foreground "#FFFFFF"))
 
 
-;; (setq centaur-tabs-set-bar 'under)
-;; (setq x-underline-at-descent-line t)
-;; (setq centaur-tabs-set-close-button nil)
-
-(use-package centaur-tabs
-  :hook
-  (dired-mode . centaur-tabs-local-mode)
-  (dashboard-mode . centaur-tabs-local-mode)
-  )
-
-(map! :leader
-  (:prefix ("e". "evaluate/ERC/EWW")
-   :desc "Evaluate elisp in buffer" "b" #'eval-buffer
-   :desc "Evaluate defun" "d" #'eval-defun
-   :desc "Evaluate elisp expression" "e" #'eval-expression
-   :desc "Evaluate last sexpression" "l" #'eval-last-sexp
-   :desc "Evaluate elisp in region" "r" #'eval-region))
-
 ; (use-package dashboard
 ;   :init      ;; tweak dashboard config before loading it
 ;   (setq dashboard-banner-logo-title nil)
@@ -334,6 +316,7 @@
 ;; enable word-wrap (almost) everywhere
 (+global-word-wrap-mode +1)
 
+;; NOTE: eval function are under SPC m e
 ;; NOTE: Windows installation:
 ;; ONLY using pacman, first install mingw and all related stuff.
 ;; Be sure that you delete all the mingw from PC so the only left is pacman. Like choco or scoop
