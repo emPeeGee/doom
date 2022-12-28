@@ -355,6 +355,7 @@
 ;; enable word-wrap (almost) everywhere
 (+global-word-wrap-mode +1)
 
+<<<<<<< HEAD
 (after! which-key
   (setq which-key-side-window-max-height 0.5))
 
@@ -379,7 +380,9 @@
 ;; NOTE: C-z, switch between emacs vanilla and evil mode
 ;; NOTE: C-h l or SPC h l. view history
 ;; NOTE: C-o, jump back after definition. C-i forward
+=======
 ;; NOTE: eval function are under SPC m e
+>>>>>>> 69d168bf6aaf6924adb58046cb42f0052f5db34d
 ;; NOTE: Windows installation:
 ;; ONLY using pacman, first install mingw and all related stuff.
 ;; Be sure that you delete all the mingw from PC so the only left is pacman. Like choco or scoop
