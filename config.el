@@ -358,6 +358,30 @@
 ;; enable word-wrap (almost) everywhere
 (+global-word-wrap-mode +1)
 
+(after! which-key
+  (setq which-key-side-window-max-height 0.5))
+
+;; TODO: As an experiment, because I don't use 't' at all, 'T' now is free
+(evil-define-key 'normal 'global (kbd "t") 'avy-goto-char-2)
+
+;; Org mode
+(setq org-agenda-files '("~/org")) ;; Must do this so the agenda knows where to look for my files
+(setq org-log-done 'time) ;; When a TODO is set to a done state, record a timestamp
+(setq org-return-follows-link  t)
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+
+;; Remap the change priority keys to use the UP or DOWN key
+(global-set-key (kbd "C-c <up>") #'org-priority-up)
+(global-set-key (kbd "C-c <down>") #'org-priority-down)
+
+;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
+(setq org-hide-emphasis-markers t)
+
+
+;; NOTE: SPC u g a to know the current face under cursor
+;; NOTE: C-z, switch between emacs vanilla and evil mode
+;; NOTE: C-h l or SPC h l. view history
+;; NOTE: C-o, jump back after definition. C-i forward
 ;; NOTE: Windows installation:
 ;; ONLY using pacman, first install mingw and all related stuff.
 ;; Be sure that you delete all the mingw from PC so the only left is pacman. Like choco or scoop
