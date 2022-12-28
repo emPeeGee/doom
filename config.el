@@ -79,6 +79,8 @@
 
 ;; (set-face-attribute 'default nil :height 145)
 
+(setq display-fill-column-indicator-column 80)
+(add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; I don't use daemon on mac
 (when (eq system-type 'darwin)
