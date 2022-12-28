@@ -34,7 +34,7 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one)
 (setq doom-theme 'doom-solarized-dark-high-contrast)
-;; (setq doom-theme 'doom-solarized-light)
+(setq solarized-scale-org-headlines nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -79,13 +79,10 @@
 
 ;; (set-face-attribute 'default nil :height 145)
 
-(setq doom-themes-treemacs-theme "doom-colors")
 
-
+;; I don't use daemon on mac
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil :font "JetBrains Mono-16"))
-
-
 
 ;; https://github.com/termitereform/JunkPile/blob/master/emacs-on-windows.md#creating-a-safe-start-shortcut
 ;; https://emacs.stackexchange.com/questions/46541/running-emacs-as-a-daemon-does-not-load-custom-set-faces
@@ -96,10 +93,11 @@
     (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
     (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
     (set-face-attribute 'default nil :font "JetBrains Mono-12")
-    (custom-set-faces
-      '(mode-line ((t (:family "JetBrains Mono" :height 0.9))))
-      '(mode-line-active ((t (:family  "JetBrains Mono" :height 0.9)))) ; For 29+
-      '(mode-line-inactive ((t (:family "JetBrains Mono" :height 0.9))))))
+    (setq all-the-icons-scale-factor 1.0)
+    (custom-set-faces  ;; TODO: font family
+      '(mode-line ((t (:family "Noto Sans" :height 0.9))))
+      '(mode-line-active ((t (:family "Noto Sans" :height 0.9)))) ; For 29+
+      '(mode-line-inactive ((t ( :family "Noto Sans" :height 0.9))))))
 )
 
 (defun my-frame-tweaks (&optional frame)
@@ -119,11 +117,58 @@
 ;; For the case that the init file runs before the frame is created. Call of emacs with --daemon option.
 (add-hook 'after-make-frame-functions #'my-frame-tweaks t)
 
+(add-hook! org-mode 'rainbow-mode)
+(add-hook! prog-mode 'rainbow-mode)
+
+(custom-set-faces!
+  `(org-level-4 :inherit outline-4 :extend t :height 1.1)
+  `(org-level-3 :inherit outline-3 :extend t :height 1.2)
+  `(org-level-2 :inherit outline-2 :extend t :height 1.3)
+  `(org-level-1 :inherit outline-1 :extend t :height 1.4)
+  '(hl-line :background "#293b52" :extend t)
+  '(region :background "#3e4e63") ;; selected
+  '(flyspell-incorrect :underline (:color "#FF00FF" :style wave))
+  '(flyspell-duplicate :underline (:color "#9400D3" :style wave))
+  '(font-lock-comment-face :slant normal)
+  '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
+  '(treemacs-git-modified-face :foreground "#9d47ff")
+  '(show-paren-match :foreground "#FFFFFF" :background "#FF00FF")
+  '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF"))
+
+(custom-theme-set-faces!
+ 'doom-solarized-light
+  '(hl-line :background "#d9d266" :extend t)
+  '(flyspell-incorrect :underline (:color "green" :style wave))
+  '(flyspell-duplicate :underline (:color "green" :style wave)))
+
+(defun load-light-theme()
+  "Setup colorscheme, hl-line and cursor according to light theme"
+  (interactive)
+  (setq doom-theme 'doom-solarized-light)
+  (load-theme 'doom-solarized-light)
+  (setq evil-emacs-state-cursor '("firebrick" box))
+  (setq evil-normal-state-cursor '("firebrick" box))
+)
+
+(defun load-dark-theme()
+  "Setup colorscheme, hl-line and cursor according to dark theme"
+  (interactive)
+  (setq doom-theme 'doom-solarized-dark-high-contrast)
+  (load-theme 'doom-solarized-dark-high-contrast)
+  (setq evil-emacs-state-cursor '("#3c98e0" box))
+  (setq evil-normal-state-cursor '("#3c98e0" box))
+)
+
+(map! :leader "t L" #'load-light-theme)
+(map! :leader "t D" #'load-dark-theme)
+
+
+(add-hook 'after-init-hook #'global-prettier-mode)
+
 ;; Don't create new workspace on new frame
 (after! persp-mode
   (setq persp-emacsclient-init-frame-behaviour-override "main"))
 
-(add-hook 'after-init-hook #'global-prettier-mode)
 
 (setq key-chord-two-keys-delay 0.5)
 (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
@@ -131,15 +176,15 @@
 
 
 (setq scroll-margin 10)
-
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; Treemacs
+(setq doom-themes-treemacs-theme "doom-colors")
+
 (after! treemacs
-  ;; (treemacs-follow-mode 1)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-git-mode 'deferred))
-
 
 ;; TODO: colors for now
 (defface custom-line-highlight '((t (:background "#616161" :foreground "#9CCC65" :extend t))) "")
@@ -152,32 +197,15 @@
    (treemacs--setup-icon-background-colors)))
 
 
-
+;; Modeline
 (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
 (setq doom-modeline-buffer-encoding nil)
-
-
-;; (set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-19")
+(display-battery-mode 1)
+(display-time-mode t)
+(setq display-time-default-load-average nil) ;; FIXME: What does it show ?
+(setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
 
 ;; TODO: spelling history word
-;; (custom-theme-set-faces
-;;  'doom-solarized-dark-high-contrast
-;;  '(flyspell-duplicate ((t (:weight bold :underline (:color "green" :style wave)))))
-;;  '(flyspell-incorrect ((t (:weight bold :underline (:color "#8F00FF" :style wave))))))
-
-(custom-set-faces!
-  ;; press SPC u g a to know the current face under cursor
-  '(hl-line :background "#293b52" :extend t)
-  '(region :background "#3e4e63") ;; selected
-  '(flyspell-incorrect :underline (:color "#FF00FF" :style wave))
-  '(flyspell-duplicate :underline (:color "#9400D3" :style wave))
-  '(font-lock-comment-face :slant normal)
-  '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
-  '(treemacs-git-modified-face :foreground "#9d47ff")
-  '(show-paren-match :foreground "#FFFFFF" :background "#FF00FF")
-  '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF"))
-  ;; '(org-ellipsis :foreground "#FFFFFF"))
-
 
 ;; (setq centaur-tabs-set-bar 'under)
 ;; (setq x-underline-at-descent-line t)
