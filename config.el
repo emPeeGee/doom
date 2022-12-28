@@ -179,9 +179,8 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Treemacs
-(setq doom-themes-treemacs-theme "doom-colors")
-
 (after! treemacs
+  (setq doom-themes-treemacs-theme "doom-colors")
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-git-mode 'deferred))
@@ -258,7 +257,6 @@
 ;;   (setq-default spell-fu-word-regexp
 ;;     (rx
 ;;      (or
-
 ;;       ;; lowercase
 ;;       (seq
 ;;        (one-or-more lower)
@@ -266,7 +264,6 @@
 ;; 	(any "'’")
 ;; 	(one-or-more lower)
 ;; 	word-end))
-
 ;;       ;; capitalized
 ;;       (seq
 ;;        upper
@@ -275,7 +272,6 @@
 ;; 	(any "'’")
 ;; 	(one-or-more lower)
 ;; 	word-end))
-
 ;;       ;; uppercase
 ;;       (seq
 ;;        (one-or-more upper)
@@ -287,9 +283,7 @@
 ;; (defun cs/spell-fu-check-range (pos-beg pos-end)
 ;;   (let (case-fold-search)
 ;;   (spell-fu-check-range-default pos-beg pos-end)))
-
 ;; (setq-default spell-fu-check-range #'cs/spell-fu-check-range))
-
 ;; (global-spell-fu-mode)
 
 (after! flyspell
@@ -376,3 +370,5 @@
 
 ;; TODO: modeline is going from screen in right part
 ;; TODO: flyspell warning duplicated
+
+;; TODO: add-hook vs add-hook!

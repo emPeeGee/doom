@@ -1,0 +1,18 @@
+#+title: Note Cfg
+#+author: emPeeGee
+
+Today, I worked on org mode config and light theme.
+* Hello
+** What are you doinbo
+* I am fine
+** aaa
+*** fsd
+**** fdsfsd
+**** [#B] fdsfs
+
+fdsfds
+*fsd* fdsfsdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff *fsd* fdsfsdfffffff ffffffffffff fffffffffffffffffffffffffffffffffffffffffff *fsd* fdsfsdfffffffffffffffffffffffffffffffffffffffffffffff fffffffffffffff *fsd* fdsfsd jjffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fds
+*fdsf*
+/fdsfsd/
+** fdsfdfsd
