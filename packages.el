@@ -55,3 +55,4 @@
 (package! dashboard)
 ;; (package! magit-delta)
 (package! blamer)
+(package! nyan-mode)

@@ -11,7 +11,7 @@ Today, I worked on org mode config and light theme.
 **** [#B] fdsfs
 
 fdsfds
-*fsd* fdsfsdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff *fsd* fdsfsdfffffff ffffffffffff fffffffffffffffffffffffffffffffffffffffffff *fsd* fdsfsdfffffffffffffffffffffffffffffffffffffffffffffff fffffffffffffff *fsd* fdsfsd jjffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+*fsd*
 fds
 *fdsf*
 /fdsfsd/

@@ -198,13 +198,28 @@
    (treemacs--setup-icon-background-colors)))
 
 
+(setq display-time-24hr-format t)
+
+(setq display-time-interval 1)
+
 ;; Modeline
-(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-(setq doom-modeline-buffer-encoding nil)
-(display-battery-mode 1)
-(display-time-mode t)
-(setq display-time-default-load-average nil) ;; FIXME: What does it show ?
-(setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
+(after! doom-modeline
+  (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (setq doom-modeline-buffer-encoding nil)
+  (setq display-time-default-load-average nil) ;; FIXME: What does it show ?
+  (setq doom-modeline-time-icon nil)
+  (setq display-time-string-forms
+    '((propertize (concat " 🕑 " 24-hours ":" minutes))))
+  (display-battery-mode 1)
+  (display-time-mode t)
+  (setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
+  (nyan-mode))
+;; Define your custom doom-modeline
+;; Custom modeline parts
+;; (doom-modeline-def-modeline 'my-simple-line
+;;   '(bar matches buffer-info remote-host buffer-position parrot selection-info)
+;;   '(misc-info minor-modes input-method buffer-encoding major-mode process vcs checker))
+
 
 ;; TODO: spelling history word
 
