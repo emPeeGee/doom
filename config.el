@@ -214,7 +214,7 @@
   (setq display-time-default-load-average nil) ;; FIXME: What does it show ?
   (setq doom-modeline-time-icon nil)
   (setq display-time-string-forms
-    '((propertize (concat " 🕑 " 24-hours ":" minutes))))
+    '((propertize (concat  24-hours ":" minutes))))
   (display-battery-mode 1)
   (display-time-mode t)
   (setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
@@ -379,7 +379,6 @@
 ;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
 (setq org-hide-emphasis-markers t)
 
-
 (after! git-gutter-fringe
     ;; standardize default fringe width
   (if (fboundp 'fringe-mode) (fringe-mode '(6 . 8)))
@@ -390,6 +389,13 @@
     [#b00111111] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted
     [#b00111111] nil nil '(center repeated)))
+
+(setq lsp-enable-symbol-highlighting nil)
+(setq idle-highlight-exceptions-face nil)
+(global-idle-highlight-mode)
+
+;; (setq idle-highlight-exceptions-face '(font-lock-keyword-face font-lock-string-face font-lock-function-name-face font-lock-variable-name-face font-lock-type-face font-lock-reference-face))
+;; NOTE: gr or gR go eval
 ;; NOTE: SPC u g a to know the current face under cursor
 ;; NOTE: C-z, switch between emacs vanilla and evil mode
 ;; NOTE: C-h l or SPC h l. view history
@@ -411,3 +417,4 @@
 ;; TODO: flyspell warning duplicated
 
 ;; TODO: add-hook vs add-hook!
+;; Greek yogurt, with olive oil and garlic
