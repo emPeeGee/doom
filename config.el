@@ -135,11 +135,16 @@
   '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
   '(treemacs-git-modified-face :foreground "#9d47ff")
   '(show-paren-match :foreground "#FFFFFF" :background "#FF00FF")
-  '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF"))
+  '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF")
+  '(idle-highlight :background "#0d6156"))
+
 
 (custom-theme-set-faces!
- 'doom-solarized-light
-  '(hl-line :background "#d9d266" :extend t)
+  'doom-solarized-light
+  '(hl-line :background "#ede9ab" :extend t)
+  '(region :background "#ede9ab") ;; selected
+  '(idle-highlight :background "#edc2ae")
+  '(git-gutter-fr:modified :foreground "#3c98e0")
   '(flyspell-incorrect :underline (:color "green" :style wave))
   '(flyspell-duplicate :underline (:color "green" :style wave)))
 
@@ -375,6 +380,16 @@
 (setq org-hide-emphasis-markers t)
 
 
+(after! git-gutter-fringe
+    ;; standardize default fringe width
+  (if (fboundp 'fringe-mode) (fringe-mode '(6 . 8)))
+    ;; thin fringe bitmaps
+  (define-fringe-bitmap 'git-gutter-fr:added
+    [#b00111111] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified
+    [#b00111111] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted
+    [#b00111111] nil nil '(center repeated)))
 ;; NOTE: SPC u g a to know the current face under cursor
 ;; NOTE: C-z, switch between emacs vanilla and evil mode
 ;; NOTE: C-h l or SPC h l. view history
