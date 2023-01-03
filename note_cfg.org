@@ -16,3 +16,10 @@ fds
 *fdsf*
 /fdsfsd/
 ** fdsfdfsd
+
+
+** TRPC
+ Algebra & Linear Algebra (dropped out of school early, so want to catch up on this to see if AI makes more sense)
+- Play around with ChatGPT / Stable diffusion (read the papers and research until it makes sense)
+- Use git proficiently (I've been putting this off for way too long)
+

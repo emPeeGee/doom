@@ -79,7 +79,19 @@
 
 ;; (set-face-attribute 'default nil :height 145)
 
-(setq display-fill-column-indicator-column 80)
+(setq evil-want-fine-undo t ; By default while in insert all changes are one big blob. Be more granular
+  auto-save-default t ; Nobody likes to loose work, I certainly don't
+  truncate-string-ellipsis "…" ; Unicode ellipsis are nicer than "...", and also save /precious/ space
+  scroll-preserve-screen-position 'always ; Don't have `point' jump around
+  display-fill-column-indicator-column 80
+  scroll-margin 10 ; It's nice to maintain a little margin
+  display-time-24hr-format t
+  display-time-interval 1)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(global-subword-mode 1) ; Iterate through CamelCase words
+
 (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; I don't use daemon on mac
@@ -182,12 +194,14 @@
 (key-chord-mode 1)
 
 
-(setq scroll-margin 10)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(after! lsp-mode
+  (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
+  (setq lsp-headerline-breadcrumb-enable t))
 
 ;; Treemacs
 (after! treemacs
   (setq doom-themes-treemacs-theme "doom-colors")
+  (lsp-treemacs-sync-mode 1)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-git-mode 'deferred))
@@ -197,15 +211,12 @@
 
 (add-hook
  'treemacs-mode-hook
- (defun channge-hl-line-mode ()
+ (defun change-hl-line-mode ()
    (setq-local hl-line-face 'custom-line-highlight)
    (overlay-put hl-line-overlay 'face hl-line-face)
    (treemacs--setup-icon-background-colors)))
 
 
-(setq display-time-24hr-format t)
-
-(setq display-time-interval 1)
 
 ;; Modeline
 (after! doom-modeline
@@ -394,6 +405,20 @@
 (setq idle-highlight-exceptions-face nil)
 (global-idle-highlight-mode)
 
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 1)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
+
+(set-company-backend!
+  '(text-mode
+    markdown-mode
+    gfm-mode)
+  '(:separate
+    company-ispell
+    company-files
+    company-yasnippet))
+
 ;; (setq idle-highlight-exceptions-face '(font-lock-keyword-face font-lock-string-face font-lock-function-name-face font-lock-variable-name-face font-lock-type-face font-lock-reference-face))
 ;; NOTE: gr or gR go eval
 ;; NOTE: SPC u g a to know the current face under cursor
@@ -417,4 +442,5 @@
 ;; TODO: flyspell warning duplicated
 
 ;; TODO: add-hook vs add-hook!
-;; Greek yogurt, with olive oil and garlic
+;; TODO: Flycheck spell https://github.com/leotaku/flycheck-aspell
+;; TODO: imenu, consult-imenu

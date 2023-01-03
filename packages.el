@@ -56,6 +56,7 @@
 ;; (package! magit-delta)
 (package! blamer)
 (package! nyan-mode)
+(package! lsp-treemacs)
 (package! idle-highlight-mode)
 ;; (package! jest)
 ;; (package! jest-test-mode)
