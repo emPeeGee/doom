@@ -88,15 +88,22 @@
   display-time-24hr-format t
   display-time-interval 1)
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (global-subword-mode 1) ; Iterate through CamelCase words
 
 (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
 
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; I don't use daemon on mac
 (when (eq system-type 'darwin)
-  (set-face-attribute 'default nil :font "JetBrains Mono-16"))
+  (set-face-attribute 'default nil :font "JetBrains Mono-18")
+  (setq all-the-icons-scale-factor 1)
+  (custom-set-faces!
+    '(mode-line :family "JetBrains Mono" :height 150)
+    '(mode-line-inactive :family "JetBrains Mono" :height 150)))
+
+
 
 ;; https://github.com/termitereform/JunkPile/blob/master/emacs-on-windows.md#creating-a-safe-start-shortcut
 ;; https://emacs.stackexchange.com/questions/46541/running-emacs-as-a-daemon-does-not-load-custom-set-faces
@@ -220,25 +227,24 @@
 
 ;; Modeline
 (after! doom-modeline
+(doom-modeline-def-modeline 'main
+  '(bar modals follow window-number matches buffer-info remote-host buffer-position selection-info)
+  '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time " |"))
+  (setq doom-modeline-bar-width 4)
   (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
   (setq doom-modeline-buffer-encoding nil)
   (setq display-time-default-load-average nil) ;; FIXME: What does it show ?
+  (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
+  (remove-hook 'doom-modeline-mode-hook #'column-number-mode)   ; cursor column in modeline
+  (line-number-mode -1)
   (setq doom-modeline-time-icon nil)
-  (setq display-time-string-forms
-    '((propertize (concat  24-hours ":" minutes))))
+  (setq display-time-string-forms '((propertize (concat  24-hours ":" minutes))))
   (display-battery-mode 1)
   (display-time-mode t)
   (setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
   (nyan-mode))
-;; Define your custom doom-modeline
-;; Custom modeline parts
-;; (doom-modeline-def-modeline 'my-simple-line
-;;   '(bar matches buffer-info remote-host buffer-position parrot selection-info)
-;;   '(misc-info minor-modes input-method buffer-encoding major-mode process vcs checker))
-
 
 ;; TODO: spelling history word
-
 ; (use-package dashboard
 ;   :init      ;; tweak dashboard config before loading it
 ;   (setq dashboard-banner-logo-title nil)
