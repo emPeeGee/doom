@@ -58,6 +58,7 @@
 (package! nyan-mode)
 (package! lsp-treemacs)
 (package! idle-highlight-mode)
+(package! indent-guide)
 ;; (package! jest)
 ;; (package! jest-test-mode)
 ;; (package! jest-interactive-mode)

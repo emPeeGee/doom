@@ -419,6 +419,13 @@
     company-files
     company-yasnippet))
 
+
+;; Indent guide
+;; NOTE: Performance issues when using builtin doom emacs indent-guides
+(setq indent-guide-delay 0.1)
+(setq indent-guide-char "|")
+(indent-guide-global-mode)
+
 ;; (setq idle-highlight-exceptions-face '(font-lock-keyword-face font-lock-string-face font-lock-function-name-face font-lock-variable-name-face font-lock-type-face font-lock-reference-face))
 ;; NOTE: gr or gR go eval
 ;; NOTE: SPC u g a to know the current face under cursor
