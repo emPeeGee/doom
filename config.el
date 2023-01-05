@@ -91,12 +91,22 @@
 
 (global-subword-mode 1) ; Iterate through CamelCase words
 
+;; TODO: ???
 (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
-
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (setq evil-emacs-state-cursor '("white" box)
+        evil-normal-state-cursor '("green" box)
+        evil-visual-state-cursor '("orange" box)
+        evil-insert-state-cursor '("red" bar)
+        ;; use emacs-28 undo system
+        evil-undo-system 'undo-redo)
 
 ;; I don't use daemon on mac
 (when (eq system-type 'darwin)
+  (add-to-list 'default-frame-alist '(height . 54))
+  (add-to-list 'default-frame-alist '(width . 125))
+  (add-to-list 'default-frame-alist '(left . 0))
+  (add-to-list 'default-frame-alist '(top . 0))
+  (add-to-list 'default-frame-alist '(undecorated . t))
   (set-face-attribute 'default nil :font "JetBrains Mono-18")
   (setq all-the-icons-scale-factor 1)
   (custom-set-faces!
@@ -111,6 +121,7 @@
   "Setup specific windows settings"
   (when (eq system-type 'windows-nt)
     (message "Setting windows")
+    (add-to-list 'default-frame-alist '(fullscreen . maximized))
     (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
     (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
     (set-face-attribute 'default nil :font "JetBrains Mono-12")
@@ -216,13 +227,15 @@
 ;; Treemacs
 (after! treemacs
   (setq doom-themes-treemacs-theme "doom-colors")
+  (setq treemacs-width 25)
+  (setq treemacs-indentation 1)
   (lsp-treemacs-sync-mode 1)
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-git-mode 'deferred))
 
 ;; TODO: colors for now
-(defface custom-line-highlight '((t (:background "#616161" :foreground "#9CCC65" :extend t))) "")
+(defface custom-line-highlight '((t (:background "#454545" :extend t))) "")
 
 (add-hook
  'treemacs-mode-hook
@@ -465,3 +478,17 @@
 ;; TODO: add-hook vs add-hook!
 ;; TODO: Flycheck spell https://github.com/leotaku/flycheck-aspell
 ;; TODO: imenu, consult-imenu
+
+;; Vectico
+(after! vertico
+  (define-key vertico-map (kbd "TAB") #'vertico-next)
+  (define-key vertico-map (kbd "<backtab>") #'vertico-previous))
+
+
+
+;; (global-set-key [8]  'delete-backward-char);;; Ctrl-h = Backspace
+;; (blink-cursor-mode 1)
+
+;; NOTE: ctrl-h to backspace
+(define-key evil-insert-state-map (kbd "C-h") #'backward-delete-char)
+;; (setq ns-auto-hide-menu-bar t)
