@@ -33,7 +33,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one)
-(setq doom-theme 'doom-solarized-dark-high-contrast)
+(setq doom-theme 'doom-gruvbox)
 (setq solarized-scale-org-headlines nil)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -148,24 +148,33 @@
   `(org-level-1 :inherit outline-1 :extend t :height 1.4)
   '(hl-line :background "#293b52" :extend t)
   '(region :background "#3e4e63") ;; selected
-  '(flyspell-incorrect :underline (:color "#FF00FF" :style wave))
-  '(flyspell-duplicate :underline (:color "#9400D3" :style wave))
+  '(flyspell-incorrect :underline (:color "green" :style wave))
+  '(flyspell-duplicate :underline (:color "cyan" :style wave))
   '(font-lock-comment-face :slant normal)
   '(sp-show-pair-match-face :foreground "#FFFFFF" :background "#FF00FF")
   '(treemacs-git-modified-face :foreground "#9d47ff")
+  '(treemacs-git-untracked-face :foreground "red" :weight normal)
   '(show-paren-match :foreground "#FFFFFF" :background "#FF00FF")
   '(show-paren-match-expression :foreground "#FFFFFF" :background "#FF00FF")
   '(idle-highlight :background "#0d6156"))
 
+;; NOTE: `rainbow-mode' uses text properties to highlight.
+;; `hl-line-mode' uses an overlay to highlight.
+;; Overlay highlighting overrides text-property highlighting.
+
+;; For gruvbox colors: https://github.com/morhetz/gruvbox
+(custom-theme-set-faces!
+  'doom-gruvbox
+  '(hl-line :background "#665c54")
+  '(region :background "#665c54") ;; selected
+  '(idle-highlight :background "#83a598" :foreground "#fbf1c7"))
 
 (custom-theme-set-faces!
   'doom-solarized-light
   '(hl-line :background "#ede9ab" :extend t)
   '(region :background "#ede9ab") ;; selected
   '(idle-highlight :background "#edc2ae")
-  '(git-gutter-fr:modified :foreground "#3c98e0")
-  '(flyspell-incorrect :underline (:color "green" :style wave))
-  '(flyspell-duplicate :underline (:color "green" :style wave)))
+  '(git-gutter-fr:modified :foreground "#3c98e0"))
 
 (defun load-light-theme()
   "Setup colorscheme, hl-line and cursor according to light theme"
@@ -179,11 +188,10 @@
 (defun load-dark-theme()
   "Setup colorscheme, hl-line and cursor according to dark theme"
   (interactive)
-  (setq doom-theme 'doom-solarized-dark-high-contrast)
-  (load-theme 'doom-solarized-dark-high-contrast)
-  (setq evil-emacs-state-cursor '("#3c98e0" box))
-  (setq evil-normal-state-cursor '("#3c98e0" box))
-)
+  (setq doom-theme 'doom-gruvbox)
+  (load-theme 'doom-gruvbox)
+  (setq evil-emacs-state-cursor '("white" box))
+  (setq evil-normal-state-cursor '("white" box)))
 
 (map! :leader "t L" #'load-light-theme)
 (map! :leader "t D" #'load-dark-theme)
