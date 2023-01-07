@@ -328,6 +328,7 @@
 ;; (setq-default spell-fu-check-range #'cs/spell-fu-check-range))
 ;; (global-spell-fu-mode)
 
+;; NOTE: To make flyspell save personal words:  $ mkdir -p ~/.emacs.d/.local/etc/ispell && touch ~/.emacs.d/.local/etc/ispell/.pws
 (after! flyspell
   (setq ispell-dictionary "en")
   (setq flyspell-lazy-idle-seconds 1))
@@ -395,8 +396,6 @@
 (custom-set-faces
   '(evil-goggles-default-face ((t (:inherit 'highlight :background "orange" :foreground "white"))))) ;; default is to inherit 'region
 
-;; enable word-wrap (almost) everywhere
-(+global-word-wrap-mode +1)
 
 (after! which-key
   (setq which-key-side-window-max-height 0.5))
@@ -492,3 +491,22 @@
 ;; NOTE: ctrl-h to backspace
 (define-key evil-insert-state-map (kbd "C-h") #'backward-delete-char)
 ;; (setq ns-auto-hide-menu-bar t)
+
+(global-visual-line-mode)
+
+;; NOTE:  use hippie-expand instead of dabbrev
+(global-set-key (kbd "M-/") #'hippie-expand)
+;; Bind to web-mode because by default it binds M-/ to comment-or-uncomment, wtf
+(with-eval-after-load 'web-mode
+  (define-key web-mode-map (kbd "M-/") 'hippie-expand))
+
+
+
+;; Visual bell. Why? audible beeps are annoying. Flash only modeline
+(setq visible-bell nil
+      ring-bell-function 'flash-mode-line)
+
+(defun flash-mode-line ()
+  (invert-face 'mode-line)
+  (run-with-timer 0.1 nil #'invert-face 'mode-line))
+
