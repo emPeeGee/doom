@@ -94,12 +94,6 @@
 
 ;; TODO: ???
 (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
-  (setq evil-emacs-state-cursor '("white" box)
-        evil-normal-state-cursor '("green" box)
-        evil-visual-state-cursor '("orange" box)
-        evil-insert-state-cursor '("red" bar)
-        ;; use emacs-28 undo system
-        evil-undo-system 'undo-redo)
 
 ;; I don't use daemon on mac
 (when (eq system-type 'darwin)
@@ -199,8 +193,7 @@
   (setq doom-theme 'doom-solarized-light)
   (load-theme 'doom-solarized-light)
   (setq evil-emacs-state-cursor '("firebrick" box))
-  (setq evil-normal-state-cursor '("firebrick" box))
-)
+  (setq evil-normal-state-cursor '("firebrick" box)))
 
 (defun load-dark-theme()
   "Setup colorscheme, hl-line and cursor according to dark theme"
@@ -253,10 +246,19 @@
 
 
 ;; Modeline
+(require 'doom-modeline)
+
+(doom-modeline-def-segment evil-state
+  "The current evil state.  Requires `evil-mode' to be enabled."
+  (when (bound-and-true-p evil-local-mode)
+    (s-trim-right (evil-state-property evil-state :tag t))))
+
+;; NOTE: The modeline looks good only after repeated eval
+;; modals
 (after! doom-modeline
 (doom-modeline-def-modeline 'main
-  '(bar modals follow window-number matches buffer-info remote-host buffer-position selection-info)
-  '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time " |"))
+  '(evil-state follow window-number matches buffer-info remote-host buffer-position selection-info)
+  '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time "  " bar))
   (setq doom-modeline-bar-width 4)
   (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
   (setq doom-modeline-buffer-encoding nil)
@@ -545,6 +547,23 @@
   :fringe-bitmap 'flycheck-fringe-bitmap-ball
   :fringe-face 'flycheck-fringe-info
   :error-list-face 'flycheck-error-list-info)
+
+
+(after! evil
+  (setq evil-emacs-state-cursor '("white" box)
+    evil-normal-state-cursor '("green" box)
+    evil-visual-state-cursor '("orange" box)
+    evil-insert-state-cursor '("red" bar)
+    ;; use emacs-28 undo system
+    evil-undo-system 'undo-redo)
+
+  (setq evil-normal-state-tag   (propertize "[NRM]" 'face '((:background "#98971a" :foreground "#ebdbb2")))
+    evil-insert-state-tag   (propertize "[INS]" 'face '((:background "#fb4934") :foreground "#ebdbb2"))
+    evil-visual-state-tag   (propertize "[VSL]" 'face '((:background "#d65d0e" :foreground "#1d2021")))
+    evil-emacs-state-tag    (propertize "[EMS]" 'face '((:background "white" :foreground "#id2021")))
+    evil-motion-state-tag   (propertize "[MTN]" 'face '((:background "blue") :foreground "#ebdbb2"))
+    evil-operator-state-tag (propertize "[OPT]" 'face '((:background "purple")))))
+
 (after! minimap
   (setq minimap-disable-mode-line t)
   (setq minimap-update-delay 0.3))
