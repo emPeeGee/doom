@@ -33,6 +33,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one)
+(setq doom-gruvbox-dark-variant "soft")
 (setq doom-theme 'doom-gruvbox)
 (setq solarized-scale-org-headlines nil)
 
