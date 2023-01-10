@@ -509,6 +509,41 @@
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 
+;; NOTE: flycheck
+;;https://www.flycheck.org/en/latest/user/error-reports.html
+;;https://github.com/doomemacs/doomemacs/issues/4052
+;;https://emacs.stackexchange.com/questions/36363/how-to-change-flycheck-symbol-like-spacemacs
+
+(setq-default flycheck-indication-mode 'right-fringe)
+
+(define-fringe-bitmap 'flycheck-fringe-bitmap-ball
+  [#b11111111] nil nil '(center repeated))
+
+(flycheck-define-error-level 'error
+  :severity 100
+  :compilation-level 2
+  :overlay-category 'flycheck-error-overlay
+  :fringe-bitmap 'flycheck-fringe-bitmap-ball
+  :fringe-face 'flycheck-fringe-error
+  :error-list-face 'flycheck-error-list-error)
+
+(flycheck-define-error-level 'warning
+  :severity 10
+  :compilation-level 1
+  :overlay-category 'flycheck-warning-overlay
+  ;; :margin-spec (flycheck-make-margin-spec margin-str 'flycheck-fringe-warning)
+  :fringe-bitmap 'flycheck-fringe-bitmap-ball
+  :fringe-face 'flycheck-fringe-warning
+  :error-list-face 'flycheck-error-list-warning)
+
+(flycheck-define-error-level 'info
+  :severity -10
+  :compilation-level 0
+  :overlay-category 'flycheck-info-overlay
+  ;; :margin-spec (flycheck-make-margin-spec margin-str 'flycheck-fringe-info)
+  :fringe-bitmap 'flycheck-fringe-bitmap-ball
+  :fringe-face 'flycheck-fringe-info
+  :error-list-face 'flycheck-error-list-info)
 (after! minimap
   (setq minimap-disable-mode-line t)
   (setq minimap-update-delay 0.3))
