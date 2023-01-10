@@ -483,12 +483,6 @@
 ;; TODO: Flycheck spell https://github.com/leotaku/flycheck-aspell
 ;; TODO: imenu, consult-imenu
 
-;; Vectico
-(after! vertico
-  (define-key vertico-map (kbd "TAB") #'vertico-next)
-  (define-key vertico-map (kbd "<backtab>") #'vertico-previous))
-
-
 
 ;; (global-set-key [8]  'delete-backward-char);;; Ctrl-h = Backspace
 ;; (blink-cursor-mode 1)
