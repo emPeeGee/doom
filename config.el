@@ -159,6 +159,7 @@
   `(org-level-1 :inherit outline-1 :extend t :height 1.4)
   '(hl-line :background "#293b52" :extend t)
   '(region :background "#3e4e63") ;; selected
+  '(demap-minimap-font-face :family "minimap" :height 15)
   '(flyspell-incorrect :underline (:color "green" :style wave))
   '(flyspell-duplicate :underline (:color "cyan" :style wave))
   '(font-lock-comment-face :slant normal)
@@ -178,12 +179,16 @@
   'doom-gruvbox
   '(hl-line :background "#665c54")
   '(region :background "#665c54") ;; selected
+  '(demap-visible-region-face :background "#665c54")
+  '(demap-current-line-face :background "yellow")
   '(idle-highlight :background "#83a598" :foreground "#fbf1c7"))
 
 (custom-theme-set-faces!
   'doom-solarized-light
   '(hl-line :background "#ede9ab" :extend t)
   '(region :background "#ede9ab") ;; selected
+  '(demap-visible-region-face :background "#ede9ab")
+  '(demap-current-line-face :background "firebrick")
   '(idle-highlight :background "#edc2ae")
   '(git-gutter-fr:modified :foreground "#3c98e0"))
 
@@ -510,3 +515,11 @@
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 
+(after! minimap
+  (setq minimap-disable-mode-line t)
+  (setq minimap-update-delay 0.3))
+
+(after! demap
+  (map! :leader "t M" #'demap-toggle)
+  (add-hook! 'demap-minimap-window-set-hook 'hide-mode-line-mode)
+  (setq demap-minimap-window-width 12))

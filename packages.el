@@ -59,6 +59,7 @@
 (package! lsp-treemacs)
 (package! idle-highlight-mode)
 (package! indent-guide)
+(package! demap)
 ;; (package! jest)
 ;; (package! jest-test-mode)
 ;; (package! jest-interactive-mode)
