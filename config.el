@@ -268,8 +268,6 @@
   '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time "  " bar))
   (setq
     doom-modeline-bar-width 5
-    doom-modeline-persp-name t  ;; adds perspective name to modeline
-    doom-modeline-persp-icon t ;; adds folder icon next to persp name
     doom-modeline-buffer-file-name-style 'truncate-with-project
     doom-modeline-buffer-encoding nil
     display-time-default-load-average nil ;; FIXME: What does it show ?
