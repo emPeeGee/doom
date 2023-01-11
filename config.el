@@ -119,13 +119,13 @@
     (add-to-list 'default-frame-alist '(fullscreen . maximized))
     (setq-default ispell-program-name "C:/msys64/ucrt64/bin/aspell.exe")
     (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
-    (set-face-attribute 'default nil :font "JetBrains Mono-12")
-    (setq all-the-icons-scale-factor 1.0)
+    ;; (set-face-attribute 'default nil :font "JetBrains Mono-12")
+    (setq doom-font (font-spec :family "JetBrains Mono" :size 12.0))
+    (setq all-the-icons-scale-factor 1.2))
     (custom-set-faces  ;; TODO: font family
-      '(mode-line ((t (:family "Noto Sans" :height 0.9))))
-      '(mode-line-active ((t (:family "Noto Sans" :height 0.9)))) ; For 29+
-      '(mode-line-inactive ((t ( :family "Noto Sans" :height 0.9))))))
-)
+      '(mode-line ((t (:font "JetBrains Mono-10"))))
+      '(mode-line-active ((t (:font "JetBrains Mono-10")))) ; For 29+
+      '(mode-line-inactive ((t ( :font "JetBrains Mono-10"))))))
 
 (defun my-frame-tweaks (&optional frame)
   "My personal frame tweaks."
