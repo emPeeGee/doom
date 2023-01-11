@@ -60,6 +60,8 @@
 (package! idle-highlight-mode)
 (package! indent-guide)
 (package! demap)
+(package! dired-open)
+(package! dired-subtree)
 ;; (package! jest)
 ;; (package! jest-test-mode)
 ;; (package! jest-interactive-mode)
