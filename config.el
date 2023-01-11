@@ -374,18 +374,16 @@
       (message "Flyspell on (text)")
       (flyspell-mode 1)))))
 
-
-
-;; ;; NOTE: discarding code from magit doesn't work
-;; (setq magit-diff-refine-hunk 'all)
-;; (use-package! magit-delta
-;;   :after magit
-;;   :config
-;;   (setq
-;;     magit-delta-default-dark-theme "OneHalfDark"
-;;     magit-delta-default-light-theme "Github"
-;;     magit-delta-hide-plus-minus-markers nil)
-;;   (magit-delta-mode))
+;; NOTE: discarding code from magit doesn't work
+(setq magit-diff-refine-hunk 'all)
+(use-package! magit-delta
+  :after magit
+  :config
+  (setq
+    magit-delta-default-dark-theme "gruvbox-dark"
+    magit-delta-default-light-theme "Solarized (light)"
+    magit-delta-hide-plus-minus-markers nil)
+  (magit-delta-mode +1))
 
 (use-package blamer
   :defer 20

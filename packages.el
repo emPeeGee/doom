@@ -53,7 +53,7 @@
 (package! key-chord)
 (package! treemacs-all-the-icons)
 (package! dashboard)
-;; (package! magit-delta)
+(package! magit-delta)
 (package! blamer)
 (package! nyan-mode)
 (package! lsp-treemacs)
