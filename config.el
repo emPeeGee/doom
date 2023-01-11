@@ -103,12 +103,7 @@
   (add-to-list 'default-frame-alist '(top . 0))
   (add-to-list 'default-frame-alist '(undecorated . t))
   (set-face-attribute 'default nil :font "JetBrains Mono-18")
-  (setq all-the-icons-scale-factor 1)
-  (custom-set-faces!
-    '(mode-line :family "JetBrains Mono" :height 150)
-    '(mode-line-inactive :family "JetBrains Mono" :height 150)))
-
-
+  (setq all-the-icons-scale-factor 1))
 
 ;; https://github.com/termitereform/JunkPile/blob/master/emacs-on-windows.md#creating-a-safe-start-shortcut
 ;; https://emacs.stackexchange.com/questions/46541/running-emacs-as-a-daemon-does-not-load-custom-set-faces
@@ -121,11 +116,7 @@
     (setq ispell-extra-args '("--encoding=utf-8" "--sug-mode=ultra" "--lang=en" "--run-together" "--camel-case"))
     ;; (set-face-attribute 'default nil :font "JetBrains Mono-12")
     (setq doom-font (font-spec :family "JetBrains Mono" :size 12.0))
-    (setq all-the-icons-scale-factor 1.2))
-    (custom-set-faces  ;; TODO: font family
-      '(mode-line ((t (:font "JetBrains Mono-10"))))
-      '(mode-line-active ((t (:font "JetBrains Mono-10")))) ; For 29+
-      '(mode-line-inactive ((t ( :font "JetBrains Mono-10"))))))
+    (setq all-the-icons-scale-factor 1.2)))
 
 (defun my-frame-tweaks (&optional frame)
   "My personal frame tweaks."
@@ -135,8 +126,21 @@
     (with-selected-frame frame
       (when (display-graphic-p)
         (tool-bar-mode -1))))
-    (windows-face)
-)
+    (windows-face))
+
+(defun my/set-up-doom-modeline-font ()
+  "Set up doom modeline font"
+  (message "modl")
+  (after! doom-modeline
+    (custom-set-faces
+
+  (when (eq system-type 'windows-nt)
+    (set-face-attribute 'mode-line nil :font "JetBrains Mono-10"))
+  (when (eq system-type 'darwin)
+    (custom-set-faces!
+      '(mode-line :family "JetBrains Mono" :height 150)
+      '(mode-line-inactive :family "JetBrains Mono" :height 150))))))
+
 
 
 ;; For the case that the init file runs after the frame has been created. Call of emacs without --daemon option.
@@ -144,14 +148,17 @@
 ;; For the case that the init file runs before the frame is created. Call of emacs with --daemon option.
 (add-hook 'after-make-frame-functions #'my-frame-tweaks t)
 
+(add-hook 'emacs-startup-hook  #'my/set-up-doom-modeline-font)
 (add-hook! org-mode 'rainbow-mode)
 (add-hook! prog-mode 'rainbow-mode)
 
 (custom-set-faces!
-  `(org-level-4 :inherit outline-4 :extend t :height 1.05)
-  `(org-level-3 :inherit outline-3 :extend t :height 1.1)
-  `(org-level-2 :inherit outline-2 :extend t :height 1.15)
-  `(org-level-1 :inherit outline-1 :extend t :height 1.2)
+  `(org-level-6 :inherit outline-4 :extend t :height 1.05)
+  `(org-level-5 :inherit outline-4 :extend t :height 1.10)
+  `(org-level-4 :inherit outline-4 :extend t :height 1.15)
+  `(org-level-3 :inherit outline-3 :extend t :height 1.20)
+  `(org-level-2 :inherit outline-2 :extend t :height 1.25)
+  `(org-level-1 :inherit outline-1 :extend t :height 1.30)
   '(hl-line :background "#293b52" :extend t)
   '(region :background "#3e4e63") ;; selected
   '(demap-minimap-font-face :family "minimap" :height 15)
@@ -259,18 +266,21 @@
 (doom-modeline-def-modeline 'main
   '(evil-state follow window-number matches buffer-info remote-host buffer-position selection-info)
   '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time "  " bar))
-  (setq doom-modeline-bar-width 4)
-  (setq doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (setq doom-modeline-buffer-encoding nil)
-  (setq display-time-default-load-average nil) ;; FIXME: What does it show ?
+  (setq
+    doom-modeline-bar-width 5
+    doom-modeline-persp-name t  ;; adds perspective name to modeline
+    doom-modeline-persp-icon t ;; adds folder icon next to persp name
+    doom-modeline-buffer-file-name-style 'truncate-with-project
+    doom-modeline-buffer-encoding nil
+    display-time-default-load-average nil ;; FIXME: What does it show ?
+    mode-line-in-non-selected-windows nil ;; FIXME: Does not work
+    doom-modeline-time-icon nil
+    display-time-string-forms '((propertize (concat  24-hours ":" minutes))))
   (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
   (remove-hook 'doom-modeline-mode-hook #'column-number-mode)   ; cursor column in modeline
   (line-number-mode -1)
-  (setq doom-modeline-time-icon nil)
-  (setq display-time-string-forms '((propertize (concat  24-hours ":" minutes))))
   (display-battery-mode 1)
   (display-time-mode t)
-  (setq mode-line-in-non-selected-windows nil) ;; FIXME: Does not work
   (nyan-mode))
 
 ;; TODO: spelling history word
