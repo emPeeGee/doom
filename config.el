@@ -422,17 +422,31 @@
 (evil-define-key 'normal 'global (kbd "t") 'avy-goto-char-2)
 
 ;; Org mode
-(setq org-agenda-files '("~/org")) ;; Must do this so the agenda knows where to look for my files
-(setq org-log-done 'time) ;; When a TODO is set to a done state, record a timestamp
-(setq org-return-follows-link  t)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(after! org-mode
+  (setq org-agenda-files '("~/org")) ;; Must do this so the agenda knows where to look for my files
+  (setq org-log-done 'time) ;; When a TODO is set to a done state, record a timestamp
+  (setq org-return-follows-link  t)
+  ;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
+  (setq org-hide-emphasis-markers t)
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
-;; Remap the change priority keys to use the UP or DOWN key
-(global-set-key (kbd "C-c <up>") #'org-priority-up)
-(global-set-key (kbd "C-c <down>") #'org-priority-down)
 
-;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
-(setq org-hide-emphasis-markers t)
+  ;; TODO: Capture to current day and work
+  ;; https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/
+  (setq org-capture-templates
+    '(
+     ("j" "Work Log Entry"
+       entry (file+datetree "~/org/work-log.org")
+       "* %?"
+       :empty-lines 0)
+     ("n" "Note"
+       entry (file+headline "~/org/notes.org" "Notes")
+       "** %?"
+       :empty-lines 0)))
+
+  ;; Remap the change priority keys to use the UP or DOWN key
+  (global-set-key (kbd "C-c <up>") #'org-priority-up)
+  (global-set-key (kbd "C-c <down>") #'org-priority-down))
 
 (after! git-gutter-fringe
     ;; standardize default fringe width
