@@ -512,6 +512,16 @@
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 
+
+;; FIXME: Not sure if it has effect
+(require 'ansi-color)
+(require 'eshell)
+
+(defun eshell-handle-ansi-color ()
+  (ansi-color-apply-on-region eshell-last-output-start
+                              eshell-last-output-end))
+(add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
+
 ;; NOTE: flycheck
 ;;https://www.flycheck.org/en/latest/user/error-reports.html
 ;;https://github.com/doomemacs/doomemacs/issues/4052
