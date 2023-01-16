@@ -588,6 +588,27 @@
   (add-hook! 'demap-minimap-window-set-hook 'hide-mode-line-mode)
   (setq demap-minimap-window-width 12))
 
+
+;; Custom
+(defun my/copy-absolute-path-name-clipboard ()
+  "Copy the absolute current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+(defun my/copy-relative-path-name-clipboard ()
+  "Copy the current buffer file name to the clipboard relative to project"
+  (interactive)
+  (let ((filename (file-relative-name buffer-file-name (projectile-project-root))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+
 ;; Dired
 (add-hook 'dired-after-readin-hook 'dired-git-info-auto-enable)
 (setq dired-listing-switches "-l --all --group-directories-first --human-readable --no-group")
