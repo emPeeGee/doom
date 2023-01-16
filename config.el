@@ -130,16 +130,13 @@
 
 (defun my/set-up-doom-modeline-font ()
   "Set up doom modeline font"
-  (message "modl")
   (after! doom-modeline
-    (custom-set-faces
-
-  (when (eq system-type 'windows-nt)
-    (set-face-attribute 'mode-line nil :font "JetBrains Mono-10"))
-  (when (eq system-type 'darwin)
-    (custom-set-faces!
-      '(mode-line :family "JetBrains Mono" :height 150)
-      '(mode-line-inactive :family "JetBrains Mono" :height 150))))))
+    (when (eq system-type 'windows-nt)
+      (set-face-attribute 'mode-line nil :font "JetBrains Mono-10"))
+    (when (eq system-type 'darwin)
+      (custom-set-faces!
+        '(mode-line :family "JetBrains Mono" :height 150)
+        '(mode-line-inactive :family "JetBrains Mono" :height 150)))))
 
 
 

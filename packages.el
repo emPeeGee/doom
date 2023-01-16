@@ -62,6 +62,8 @@
 (package! demap)
 (package! dired-open)
 (package! dired-subtree)
+(package! dired-rainbow)
+(package! dired-collapse)
 ;; (package! jest)
 ;; (package! jest-test-mode)
 ;; (package! jest-interactive-mode)
