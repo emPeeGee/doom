@@ -425,21 +425,6 @@
   ;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
   (setq org-hide-emphasis-markers t)
   (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-
-
-  ;; TODO: Capture to current day and work
-  ;; https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/
-  (setq org-capture-templates
-    '(
-     ("j" "Work Log Entry"
-       entry (file+datetree "~/org/work-log.org")
-       "* %?"
-       :empty-lines 0)
-     ("n" "Note"
-       entry (file+headline "~/org/notes.org" "Notes")
-       "** %?"
-       :empty-lines 0)))
-
   ;; Remap the change priority keys to use the UP or DOWN key
   (global-set-key (kbd "C-c <up>") #'org-priority-up)
   (global-set-key (kbd "C-c <down>") #'org-priority-down))
@@ -675,3 +660,27 @@
 
 ;; NOTE: org mode, tags, priority, checkboxes with [] summary with / and %
 ;; NOTE: speedbar builtin file tree
+;; NOTE: icomplete instead of vertico ???
+;; NOTE: zone (zone-when-idle 12)
+
+
+;; TODO: Capture to current day and work
+;; https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/
+;; TODO: what is clocking ???
+(setq org-capture-templates
+  '(("e" "English classes"
+     entry (file+headline "~/org/english.org" "Lessons")
+     "* Lesson nr. %? %t" :empty-lines 0)
+   ("a" "Adobe Work Log Entry"
+     entry (file+datetree "~/org/acc-work-log.org")
+     "* %?\n%U %f\n" :empty-lines 0)
+   ("A" "Adobe Work Log Scrum update"
+     entry (file+datetree "~/org/acc-work-log.org")
+     "* Scrum update %t %(org-set-tags \"scrum\") \n %?\n%U\n" :empty-lines 0)
+   ;; ("t" "Todo"
+   ;;   entry (file "~/org/todo.org")
+   ;;   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+   ("n" "Note"
+     entry (file+headline "~/org/notes.org" "Notes")
+     "** %?"
+     :empty-lines 0)))
