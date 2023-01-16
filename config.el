@@ -153,6 +153,8 @@
 (add-hook! prog-mode 'rainbow-mode)
 
 (custom-set-faces!
+  ;; TODO: Another color and for light too
+  '(org-agenda-diary :foreground "yellow")
   `(org-level-6 :inherit outline-4 :extend t :height 1.05)
   `(org-level-5 :inherit outline-4 :extend t :height 1.10)
   `(org-level-4 :inherit outline-4 :extend t :height 1.15)
@@ -698,10 +700,26 @@
    ("A" "Adobe Work Log Scrum update"
      entry (file+datetree "~/org/acc-work-log.org")
      "* Scrum update %t %(org-set-tags \"scrum\") \n %?\n%U\n" :empty-lines 0)
-   ;; ("t" "Todo"
-   ;;   entry (file "~/org/todo.org")
-   ;;   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+   ("T" "Adobe todo"
+     entry (file+olp "~/org/acc.org" "Adobe Acc" "TODOs")
+     "*** TODO %? %t \n%a\n")
+   ("t" "Todo"
+     entry (file "~/org/todo.org")
+     "* TODO %? %t")
+     ;; "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
    ("n" "Note"
      entry (file+headline "~/org/notes.org" "Notes")
      "** %?"
      :empty-lines 0)))
+
+;; NOTE Agenda adds in it every entry with timestamp
+(setq org-datetree-add-timestamp t) ;; Add timestamp on every date tree entry, it will be visible in agenda
+
+(setq org-agenda-include-diary t) ;; Add events from diary and emacs default
+(setq diary-file "~/org/diary") ;; Change location of diary
+
+;; TODO: labels
+;; (setq org-tag-alist (quote (("scrum"    . ?b)
+;;                            ("COMP"    . ?c)
+;;                            ("EMACS"   . ?e)
+;;                            ("FOOD"    . ?f))))
