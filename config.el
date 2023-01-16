@@ -105,6 +105,12 @@
   (set-face-attribute 'default nil :font "JetBrains Mono-18")
   (setq all-the-icons-scale-factor 1))
 
+(when (eq system-type 'gnu/linux)
+  (add-to-list 'default-frame-alist '(height . 57))
+  (add-to-list 'default-frame-alist '(width . 100))
+  (set-face-attribute 'default nil :font "JetBrains Mono-14")
+  (setq all-the-icons-scale-factor 1))
+
 ;; https://github.com/termitereform/JunkPile/blob/master/emacs-on-windows.md#creating-a-safe-start-shortcut
 ;; https://emacs.stackexchange.com/questions/46541/running-emacs-as-a-daemon-does-not-load-custom-set-faces
 (defun windows-face()
@@ -440,8 +446,12 @@
     [#b00111111] nil nil '(center repeated)))
 
 (setq lsp-enable-symbol-highlighting nil)
-(setq idle-highlight-exceptions-face nil)
-(global-idle-highlight-mode)
+
+(use-package idle-highlight-mode
+  :config
+    (setq idle-highlight-exceptions-face nil)
+    (idle-highlight-global-mode))
+
 
 (after! company
   (setq company-idle-delay 0.5
@@ -717,6 +727,6 @@
 
 ;; TODO: labels
 ;; (setq org-tag-alist (quote (("scrum"    . ?b)
-;;                            ("COMP"    . ?c)
-;;                            ("EMACS"   . ?e)
-;;                            ("FOOD"    . ?f))))
+;;   ("COMP"    . ?c)
+;;   ("EMACS"   . ?e)
+;;   ("FOOD"    . ?f))))
