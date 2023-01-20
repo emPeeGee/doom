@@ -432,16 +432,38 @@
 (evil-define-key 'normal 'global (kbd "t") 'avy-goto-char-2)
 
 ;; Org mode
-(after! org-mode
+(after! org
   (setq org-agenda-files '("~/org")) ;; Must do this so the agenda knows where to look for my files
   (setq org-log-done 'time) ;; When a TODO is set to a done state, record a timestamp
   (setq org-return-follows-link  t)
   ;; FIXME: Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
   (setq org-hide-emphasis-markers t)
+(setq org-capture-templates
+    '(("e" "English classes"
+       entry (file+headline "~/org/english.org" "Lessons")
+       "* Lesson nr. %? %t" :empty-lines 0)
+     ("a" "Adobe Work Log Entry"
+       entry (file+datetree "~/org/acc-work-log.org")
+       "* %?\n%U %f\n" :empty-lines 0)
+     ("A" "Adobe Work Log Scrum update"
+       entry (file+datetree "~/org/acc-work-log.org")
+       "* Scrum update %t %(org-set-tags \"scrum\") \n %?\n%U\n" :empty-lines 0)
+     ("T" "Adobe todo"
+       entry (file+olp "~/org/acc.org" "Adobe Acc" "TODOs")
+       "*** TODO %? %t \n%a\n")
+     ("t" "Todo"
+       entry (file "~/org/todo.org")
+       "* TODO %? %t")
+       ;; "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+     ("n" "Note"
+       entry (file+headline "~/org/notes.org" "Notes")
+       "** %?"
+       :empty-lines 0)))
   (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
   ;; Remap the change priority keys to use the UP or DOWN key
   (global-set-key (kbd "C-c <up>") #'org-priority-up)
   (global-set-key (kbd "C-c <down>") #'org-priority-down))
+
 
 (after! git-gutter-fringe
     ;; standardize default fringe width
