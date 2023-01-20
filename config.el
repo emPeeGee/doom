@@ -132,10 +132,12 @@
     (with-selected-frame frame
       (when (display-graphic-p)
         (tool-bar-mode -1))))
-    (windows-face))
+    (windows-face)
+    (my/set-up-doom-modeline-font))
 
 (defun my/set-up-doom-modeline-font ()
   "Set up doom modeline font"
+  (interactive)
   (after! doom-modeline
     (when (eq system-type 'windows-nt)
       (set-face-attribute 'mode-line nil :font "JetBrains Mono-10"))
