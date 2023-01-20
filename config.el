@@ -150,6 +150,11 @@
 (my-frame-tweaks)
 ;; For the case that the init file runs before the frame is created. Call of emacs with --daemon option.
 (add-hook 'after-make-frame-functions #'my-frame-tweaks t)
+;; Works in both emacs client and emacs
+(setq initial-buffer-choice (lambda ()
+    (org-agenda-list 7)
+    (get-buffer "*Org Agenda*")))
+
 
 (add-hook 'emacs-startup-hook  #'my/set-up-doom-modeline-font)
 (add-hook! org-mode 'rainbow-mode)
@@ -157,7 +162,6 @@
 
 (custom-set-faces!
   ;; TODO: Another color and for light too
-  '(org-agenda-diary :foreground "yellow")
   `(org-level-6 :inherit outline-4 :extend t :height 1.05)
   `(org-level-5 :inherit outline-4 :extend t :height 1.10)
   `(org-level-4 :inherit outline-4 :extend t :height 1.15)
@@ -188,14 +192,19 @@
   '(region :background "#665c54") ;; selected
   '(demap-visible-region-face :background "#665c54")
   '(demap-current-line-face :background "yellow")
-  '(idle-highlight :background "#83a598" :foreground "#fbf1c7"))
+  '(org-agenda-diary :foreground "yellow")
+  '(idle-highlight :background "#8f3f71" :foreground "#fbf1c7"))
+  ;; '(idle-highlight :background "#7c6f64" :foreground "#fbf1c7"))
 
+;; For solarized colors: https://en.wikipedia.org/wiki/Solarized
 (custom-theme-set-faces!
   'doom-solarized-light
   '(hl-line :background "#ede9ab" :extend t)
   '(region :background "#ede9ab") ;; selected
+  '(shadow :foreground "#6c71c4")
   '(demap-visible-region-face :background "#ede9ab")
   '(demap-current-line-face :background "firebrick")
+  '(org-agenda-diary :foreground "firebrick")
   '(idle-highlight :background "#edc2ae")
   '(git-gutter-fr:modified :foreground "#3c98e0"))
 
