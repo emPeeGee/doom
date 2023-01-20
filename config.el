@@ -715,3 +715,19 @@
 ;; NOTE: Agenda, diary and calendar
 ;; NOTE: org refile
 ;; TODO: clocking
+
+;; Set default column view headings: Task Total-Time Time-Stamp
+;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+
+;; prOcess manager,
+;; NOTE: Only exe are listed
+(use-package proced
+  :commands proced
+  :bind (("C-c C-p" . proced))
+  :config
+  (setq-default proced-auto-update-flag nil)
+  (setq proced-goal-attribute nil
+        proced-enable-color-flag t)) ;; Emacs 29
+
+
+;; TODO: Dirvish vs Dired
