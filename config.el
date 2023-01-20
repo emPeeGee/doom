@@ -704,3 +704,14 @@
 ;;   ("COMP"    . ?c)
 ;;   ("EMACS"   . ?e)
 ;;   ("FOOD"    . ?f))))
+
+(setq calendar-mark-diary-entries-flag t)
+(setq calendar-mark-holidays-flag t)
+(setq calendar-mark-today-flag t)
+(setq calendar-mark-ring t)
+(setq calendar-week-start-day 1)
+
+;; NOTE: dired with all icons
+;; NOTE: Agenda, diary and calendar
+;; NOTE: org refile
+;; TODO: clocking
