@@ -244,9 +244,10 @@
 (key-chord-mode 1)
 
 
-(after! lsp-mode
-  (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
-  (setq lsp-headerline-breadcrumb-enable t))
+;; (after! lsp-mode
+;;   (setq lsp-headerline-breadcrumb-icons-enable nil)
+;;   (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
+;;   (setq lsp-headerline-breadcrumb-enable t))
 
 ;; Treemacs
 (after! treemacs
@@ -278,10 +279,13 @@
   (when (bound-and-true-p evil-local-mode)
     (s-trim-right (evil-state-property evil-state :tag t))))
 
+
 ;; NOTE: The modeline looks good only after repeated eval
 ;; modals
 (after! doom-modeline
 (doom-modeline-def-modeline 'main
+  ;; '(evil-state follow window-number matches buffer-info remote-host buffer-position selection-info)
+  ;; '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time "  " bar))
   '(evil-state follow window-number matches buffer-info remote-host buffer-position selection-info)
   '(compilation objed-state misc-info persp-name irc debug minor-modes mu4e github input-method buffer-encoding lsp major-mode process vcs checker battery time "  " bar))
   (setq
@@ -755,5 +759,109 @@
   (setq proced-goal-attribute nil
         proced-enable-color-flag t)) ;; Emacs 29
 
-
 ;; TODO: Dirvish vs Dired
+;; NOTE: which-function-mode, displays the current function in modeline but not always correct
+;; NOTE: topsy kinda is what I want but also doesn't work correctly,
+;; NOTE: lsp-headline is sth good but it doesn't work ast , I need NOTE nvim-context
+;; https://www.reddit.com/r/emacs/comments/r6txfq/package_like_contextvim/
+
+;; NOTE Windows screen flickering will be fixed in emacs 29.
+;; fix a problem with X11 to windows
+;; https://emacs.stackexchange.com/questions/41021/emacs-26-1-rc1-display-issues-over-ssh-x11-with-xming-vcxsrv
+;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32306
+(setq default-frame-alist (append default-frame-alist '((inhibit-double-buffering . t))))
+
+
+;; (setq header-line-format "%f %l:%c size: %i %n %s %* %[ %] %-")
+
+
+(add-hook 'prog-mode-hook 'which-function-mode)
+
+(defun with-face (str &rest face-plist)
+  (propertize str 'face face-plist))
+
+
+
+
+
+(defun dump-face-attributes (face &rest props)
+  (cl-loop for prop in (or props
+               (sort (mapcar #'car face-attribute-name-alist)
+                 (lambda (s1 s2)
+                   (string< (symbol-name s1) (symbol-name s2)))))
+       for val = (face-attribute face prop nil t)
+       unless (eq val 'unspecified)
+       append (list prop val)))
+
+(defun get-face-attribute (face prop)
+  (plist-get (dump-face-attributes face prop) prop))
+
+(message (get-face-attribute 'success :foreground))
+
+(defun my/headerline-file-name()
+  (if (projectile-project-p)
+      (concat (with-face (projectile-project-name) :inherit 'success)
+        "/"
+        (file-relative-name buffer-file-name (projectile-project-root)))
+   (concat (with-face "%b   " :inherit 'success))))
+
+(message (my/headerline-file-name))
+
+(setq-default header-line-format
+  (list "-"
+   'projectile-project-root
+   'mode-line-mule-info
+   'mode-line-modified
+   'mode-line-frame-identification
+   '(:eval (my/headerline-file-name))
+   ;; (concat (with-face "%b   " :inherit 'Man-reverse :foreground (get-face-attribute 'success :foreground) :background (face-background 'Man-reverse)))
+   "     "
+   '(which-func-mode ("" which-func-format " "))
+
+   ;; Note that this is evaluated while making the list.
+   ;; It makes a mode line construct which is just a string.
+   (getenv "HOST")
+   "   "
+   ;; 'default-directory
+   "   "
+   ;; 'global-mode-string
+   " %[("
+   '(:eval (format-time-string "%F"))
+   ;; 'mode-line-process
+   ;; 'minor-mode-alist
+   "%n"
+   ")%]"
+   "    "
+   "%l:%c  "
+   ;; '(:eval (my/diff-stat))
+   "git "
+   'my/diff-var-stat
+   ))
+
+
+(setq which-func-unknown "n/a")
+
+  ;; We remove Which Function Mode from the mode line, because it's mostly invisible here anyway.
+(setq mode-line-misc-info
+  (assq-delete-all 'which-function-mode mode-line-misc-info))
+
+
+
+(defun my-run-async-shell-command-in-root ()
+  "Invoke `async-shell-command' in the project's root."
+  (interactive)
+  (projectile-with-default-dir (projectile-acquire-root)
+    (async-shell-command "ls -l")))
+
+(defun my/diff-stat ()
+  (interactive)
+  (let ((git-command (replace-regexp-in-string "\n$" ""(shell-command-to-string (concat "git diff --numstat " buffer-file-name)))))
+
+(string-match "\\([0-9]+\\).+\\([0-9]+\\)" git-command)
+(message git-command)
+
+(setq my/diff-var-stat (concat "+" (match-string 1 git-command) " -" (match-string 2 git-command))))
+(force-mode-line-update))
+
+(add-hook 'after-save-hook 'my/diff-stat)
+(my/diff-stat)
