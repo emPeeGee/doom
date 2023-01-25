@@ -774,15 +774,15 @@
 
 ;; (setq header-line-format "%f %l:%c size: %i %n %s %* %[ %] %-")
 
+(setq which-func-unknown "n/a")
+(setq mode-line-misc-info
+  (assq-delete-all 'which-function-mode mode-line-misc-info))
 
+  ;; We remove Which Function Mode from the mode line, because it's mostly invisible here anyway.
 (add-hook 'prog-mode-hook 'which-function-mode)
 
 (defun with-face (str &rest face-plist)
   (propertize str 'face face-plist))
-
-
-
-
 
 (defun dump-face-attributes (face &rest props)
   (cl-loop for prop in (or props
@@ -796,16 +796,60 @@
 (defun get-face-attribute (face prop)
   (plist-get (dump-face-attributes face prop) prop))
 
-(message (get-face-attribute 'success :foreground))
-
-(defun my/headerline-file-name()
+(after! projectile
+  (defun my/headerline-file-name()
   (if (projectile-project-p)
       (concat (with-face (projectile-project-name) :inherit 'success)
         "/"
         (file-relative-name buffer-file-name (projectile-project-root)))
    (concat (with-face "%b   " :inherit 'success))))
 
-(message (my/headerline-file-name))
+
+(defun my-run-async-shell-command-in-root ()
+  "Invoke `async-shell-command' in the project's root."
+  (interactive)
+  (projectile-with-default-dir (projectile-acquire-root)
+    (async-shell-command "ls -l")))
+
+(setq my/diff-var-stat "")
+;; (setq my/diff-status (list :add "value1" :del "value2"))
+(setq my/diff-status-add "0")
+(setq my/diff-status-del "0")
+
+(after! vc-git
+;; (witf-eval-after-load j)
+(defun my/diff-stat ()
+  (interactive)
+  ;; (message (buffer-file-name))
+
+
+(setq my/diff-status-add "0")
+(setq my/diff-status-del "0")
+
+  (when (vc-git-root (buffer-file-name))
+        (let ((git-command (replace-regexp-in-string "\n$" ""(shell-command-to-string (concat "git diff --numstat " buffer-file-name)))))
+
+(when (string= git-command "")
+  (setq git-command "0 0"))
+  (message (concat "hmm  " git-command))
+  (string-match "\\([0-9]+\\)[[:space:]]+\\([0-9]+\\)" git-command)
+
+  (message "fff")
+  (setq my/diff-status-add (concat "+" (match-string 1 git-command)))
+  (setq my/diff-status-del (concat " -" (match-string 2 git-command)))
+
+  (message "fff")
+  (setq my/diff-var-stat
+    (concat "+" (match-string 1 git-command)
+            "-" (match-string 2 git-command)))
+  (force-mode-line-update)))
+)
+
+
+(my/diff-stat)
+
+; (add-hook 'buffer-list-update-hook 'my/diff-stat)
+(add-hook 'after-save-hook 'my/diff-stat))
 
 (setq-default header-line-format
   (list "-"
@@ -817,7 +861,6 @@
    ;; (concat (with-face "%b   " :inherit 'Man-reverse :foreground (get-face-attribute 'success :foreground) :background (face-background 'Man-reverse)))
    "     "
    '(which-func-mode ("" which-func-format " "))
-
    ;; Note that this is evaluated while making the list.
    ;; It makes a mode line construct which is just a string.
    (getenv "HOST")
@@ -833,35 +876,10 @@
    ")%]"
    "    "
    "%l:%c  "
-   ;; '(:eval (my/diff-stat))
    "git "
    'my/diff-var-stat
+   ;; (concat (with-face (plist-get my/diff-status :add) :inherit 'success))
+   " "
+   (concat (with-face my/diff-status-del  :inherit 'error))
+   (concat (with-face my/diff-status-add  :inherit 'error))
    ))
-
-
-(setq which-func-unknown "n/a")
-
-  ;; We remove Which Function Mode from the mode line, because it's mostly invisible here anyway.
-(setq mode-line-misc-info
-  (assq-delete-all 'which-function-mode mode-line-misc-info))
-
-
-
-(defun my-run-async-shell-command-in-root ()
-  "Invoke `async-shell-command' in the project's root."
-  (interactive)
-  (projectile-with-default-dir (projectile-acquire-root)
-    (async-shell-command "ls -l")))
-
-(defun my/diff-stat ()
-  (interactive)
-  (let ((git-command (replace-regexp-in-string "\n$" ""(shell-command-to-string (concat "git diff --numstat " buffer-file-name)))))
-
-(string-match "\\([0-9]+\\).+\\([0-9]+\\)" git-command)
-(message git-command)
-
-(setq my/diff-var-stat (concat "+" (match-string 1 git-command) " -" (match-string 2 git-command))))
-(force-mode-line-update))
-
-(add-hook 'after-save-hook 'my/diff-stat)
-(my/diff-stat)
