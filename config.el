@@ -230,7 +230,9 @@
 (map! :leader "t D" #'load-dark-theme)
 
 
-(add-hook 'after-init-hook #'global-prettier-mode)
+;; (add-hook 'after-init-hook #'global-prettier-mode)
+(add-hook 'js2-mode-hook 'prettier-mode)
+(add-hook 'web-mode-hook 'prettier-mode)
 
 ;; Don't create new workspace on new frame
 (after! persp-mode
